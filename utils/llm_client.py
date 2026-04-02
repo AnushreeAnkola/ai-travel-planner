@@ -9,7 +9,7 @@ client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 def get_completion(user_message, system_prompt, model):
     message = client.messages.create(
         model=model,
-        max_tokens=1024,
+        max_tokens=4096,
         system=system_prompt,
         messages = [
             {"role": "user", "content": user_message}

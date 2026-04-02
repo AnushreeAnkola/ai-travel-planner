@@ -1,7 +1,7 @@
 from utils.llm_client import get_completion
 import json
 
-def research_trip(destination, dates, interests, budget):
+def research_trip(destination, dates, interests, budget, trip_type):
     delimiter = "####"
     user_message = f"""{delimiter}
     Destination: {destination}
@@ -14,7 +14,7 @@ def research_trip(destination, dates, interests, budget):
     system_prompt = f"""
         You are a travel expert. You will be provided with a trip details delimited with {delimiter} characters.
         
-        You will need to follow the following steps to research the trip customer wants:
+        You will need to follow the following steps to research the trip customer wants based on their {trip_type}:
 
         Step 1: 
         {delimiter} First research 5 best areas/neighborhoods to stay. 
@@ -35,6 +35,9 @@ def research_trip(destination, dates, interests, budget):
         Step 6:
         {delimiter} Check for local transportation options
 
+        Step 7:
+        {delimiter} Calculate the number of days of the trip and return a integer number. 
+
 
         Respond with ONLY a JSON object, no markdown, no extra text:
         {{"neighborhoods": [...],
@@ -42,7 +45,8 @@ def research_trip(destination, dates, interests, budget):
             "customs": [...],
             "attractions": [...],
             "safety": "...",
-            "transportation": [...]}}
+            "transportation": [...],
+            "num_of_days": int}}
     """
     response = get_completion(user_message, system_prompt, model)
     print("RAW RESPONSE:", repr(response))  
